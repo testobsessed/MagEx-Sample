@@ -56,27 +56,27 @@ describe "Magical Commodity Exchange Game" do
 end
 
 describe "Player" do
-  it "has a default portfolio" do
-    player = Player.new({:item => "Rocks"})
-    player.portfolio.available_account.should == {"Rocks" => 100, "Gold" => 1000}
+  it "constructs a portfolio from the provided data" do
+    player = Player.new("Dude", {"Rocks" => 100})
+    player.portfolio.available_account.should == {"Rocks" => 100}
   end
   
   it "can offer an item for sale" do
-    player = Player.new({:name => "Fred", :item => "Rocks"})
+    player = Player.new("Fred", {"Rocks" => 100})
     player.offer("Rocks", 10)
     player.portfolio.in_escrow("Rocks").should == 10
     player.portfolio.available("Rocks").should == 90
   end
   
   it "cannot offer item for sale if not enough inventory" do
-    player = Player.new({:item => "Rocks"})
+    player = Player.new("Fred", {"Rocks" => 100})
     player.offer("Rocks", 110)
     player.portfolio.in_escrow("Rocks").should == 0
     player.portfolio.available("Rocks").should == 100
   end
   
   it "can bid on an offer" do
-    player = Player.new()
+    player = Player.new("Fred", {"Gold" => 1000})
     player.bid({}, 10)
     player.portfolio.in_escrow("Gold").should == 10
     player.portfolio.available("Gold").should == 990
@@ -84,7 +84,7 @@ describe "Player" do
   
   it "can retract a bid" do
     market = Market.new
-    player = Player.new({}, market)
+    player = Player.new("Fred", {"Gold" => 1000}, market)
     
     bid_id = player.bid({}, 10)
     player.portfolio.in_escrow("Gold").should == 10

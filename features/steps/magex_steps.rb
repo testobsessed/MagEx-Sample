@@ -1,5 +1,5 @@
 When /^I start the game$/ do
-  @game = MagexGame.new
+  
 end
 
 Then /^there are (\d+) players named (.*)$/ do |num_players, names|
@@ -87,4 +87,15 @@ end
 
 Then /^there are no bids in the market$/ do
   @game.market.bids.length.should == 0
+end
+
+Then /^(.*)'s bid is removed from the market$/ do |player|
+  @game.market.find_bid_id_matching({:bidder => player}).should == -1
+end
+
+Then /^(.*)'s portfolio has not changed$/ do |player|
+  original_portfolio = Portfolio.new(@game.default_player_data[player])
+  dude = @game.find_player(player)
+  # dude.portfolio.should == original_portfolio
+  dude.portfolio.available_account.should == original_portfolio.available_account
 end

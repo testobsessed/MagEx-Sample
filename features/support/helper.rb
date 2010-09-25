@@ -1,3 +1,12 @@
+After do |s| 
+  
+end
+
+Before do
+  @game = MagexGame.new
+  @game.players.length.should == 5
+end
+
 def extract_array_from_prose(text)
   items = text.split(",").map{|item| item.strip} # take a first pass
   if !(items.last.match(/and/).nil?)

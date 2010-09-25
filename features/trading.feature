@@ -47,6 +47,14 @@ Feature: Players can buy and sell items on the market
         And Ali Baba has 88 Flying Carpets
         And Ali Baba has 1018 Gold
         
+    Scenario: unsuccessful bids revert when a bid is accepted on an offer
+        Given T-Bell offers 12 Pixie Dust Vials
+        And Jack bids 10 Gold
+        And Ali Baba bids 12 Gold
+        When T-Bell accepts Jack's bid
+        Then Ali Baba's bid is removed from the market
+        And Ali Baba's portfolio has not changed
+        
     Scenario: a more complex trade
         Given the following offers:
         | seller          | item           | quantity |

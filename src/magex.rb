@@ -47,15 +47,39 @@ class MagexGame
     @market.remove_bids_for_offer(bid[:offer_id])
     @market.remove_offer(bid[:offer_id])
   end
+
+  def default_player_data 
+    {
+      "Fairy Godmother" => {
+            "Gold" => 1000,
+            "Wishing Wands" => 100
+       },
+       "Jack" => {
+             "Gold" => 1000,
+             "Magic Beanbags" => 100
+        },
+        "T-Bell" => {
+              "Gold" => 1000,
+              "Pixie Dust Vials" => 100
+         },
+         "Ali Baba" => {
+               "Gold" => 1000,
+               "Flying Carpets" => 100
+          },
+          "Merlin" => {
+                "Gold" => 1000,
+                "Singing Swords" => 100
+           },
+    }    
+  end
   
   def default_players
-    return [
-      Player.new({:name => "Fairy Godmother", :item => "Wishing Wands"}, @market),
-      Player.new({:name => "Jack", :item => "Magic Beanbags"}, @market),
-      Player.new({:name => "T-Bell", :item => "Pixie Dust Vials"}, @market),
-      Player.new({:name => "Ali Baba", :item => "Flying Carpets"}, @market),
-      Player.new({:name => "Merlin", :item => "Singing Swords"}, @market)
-    ]
+    players = []
+    player_data = default_player_data
+    player_data.keys.each { |player_name|
+      players.push Player.new(player_name, player_data[player_name], @market)
+    }
+    players
   end
   
 end
@@ -65,13 +89,10 @@ class Player
   attr :name
   attr :market
   
-  def initialize(attributes={}, market=nil)
+  def initialize(name, portfolio_data, market=nil)
     @market = market
-    @name = attributes[:name]
-    @portfolio = Portfolio.new({
-      attributes[:item] => 100,
-      "Gold" => 1000
-    })
+    @name = name
+    @portfolio = Portfolio.new(portfolio_data)
   end
   
   def named?(name)
